@@ -38,6 +38,10 @@ public class FlightReader {
             double averageFlightTime = flightReader.averageDuration(flightInfoList, airlineName);
             System.out.println("Average flight time for " + airlineName + ": " + averageFlightTime + " minutes");
 
+            String airlineNameTotal="Lufthansa";
+            double totalFlightTime = flightReader.totalFlightTime(flightInfoList, airlineNameTotal);
+            System.out.println("Total flight time for " + airlineNameTotal + ": " + totalFlightTime + " minutes");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,4 +93,12 @@ public class FlightReader {
 //    double averageAmount = transactions.stream()
 //            .collect(Collectors.averagingDouble(Transaction::getAmount));
 //        System.out.println("Average transaction amount: " + averageAmount);
+    public double totalFlightTime(List<DTOs.FlightInfo> flightList, String airlineNameTotal) {
+        double total = flightList.stream()
+                .filter((flightInfo -> flightInfo.getAirline() != null ? flightInfo.getAirline().equalsIgnoreCase(airlineNameTotal) : false))
+                .collect(Collectors.summingDouble(info -> info.getDuration().toMinutes()));
+        return total;
+
+    }
+    //.
 }
