@@ -89,5 +89,4 @@ public class FlightReader {
 //    double averageAmount = transactions.stream()
 //            .collect(Collectors.averagingDouble(Transaction::getAmount));
 //        System.out.println("Average transaction amount: " + averageAmount);
-//
 }
