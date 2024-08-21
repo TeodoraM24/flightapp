@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Purpose:
@@ -28,9 +29,15 @@ public class FlightReader {
         try {
             List<DTOs.FlightDTO> flightList = flightReader.getFlightsFromFile("flights.json");
             List<DTOs.FlightInfo> flightInfoList = flightReader.getFlightInfoDetails(flightList);
-            flightInfoList.forEach(f->{
-                System.out.println("\n"+f);
+            flightInfoList.forEach(f -> {
+                System.out.println("\n" + f);
             });
+
+            // Example: Calculate the average flight time for a specific airline, e.g., "Lufthansa"
+            String airlineName = "Lufthansa"; // You can change this to any airline
+            double averageFlightTime = flightReader.averageDuration(flightInfoList, airlineName);
+            System.out.println("Average flight time for " + airlineName + ": " + averageFlightTime + " minutes");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,8 +74,20 @@ public class FlightReader {
 
         List<DTOs.FlightDTO> flightList = Arrays.stream(flights).toList();
         return flightList;
+
+
     }
 
+    // Calculate the average flight time for a specific airline
+    public double averageDuration(List<DTOs.FlightInfo> flightList, String airlineName) {
+        double avg = flightList.stream()
+                .filter(flightInfo -> flightInfo.getAirline() != null ? flightInfo.getAirline().equalsIgnoreCase(airlineName) : false)
+                .collect(Collectors.averagingDouble(info -> info.getDuration().toMinutes()));
+        return avg;
+    }
 
+//    double averageAmount = transactions.stream()
+//            .collect(Collectors.averagingDouble(Transaction::getAmount));
+//        System.out.println("Average transaction amount: " + averageAmount);
+//
 }
-//develop
